@@ -6,7 +6,6 @@ import { uploadCloudinary } from "../utils/Cloudinary.js";
 
 const registerUser = asyncHandler(async (req, res) => {
     const { fullName, email, username, password } = req.body;
-    console.log(req.body);
 
     // check if all fields are provided by user
 
@@ -23,28 +22,28 @@ const registerUser = asyncHandler(async (req, res) => {
     }
 
     // check if user exists before
-    const existedUser = User.findOne({
+    const existedUser = await User.findOne({
         $or: [{ email }, { username }]
     });
-    console.log(existedUser);
 
     // checking for username and email
     // option 1 - my solution
-    if ([existedUser.email, existedUser.username].includes(email)) {
-        throw new ApiError(400, `User with email already exists`);
-    }
-    else if ([existedUser.email, existedUser.username].includes(username)) {
-        throw new ApiError(400, `User with username already exists`);
-    }
+    // if ([existedUser.email, existedUser.username].includes(email)) {
+    //     throw new ApiError(400, `User with email already exists`);
+    // }
+    // else if ([existedUser.email, existedUser.username].includes(username)) {
+    //     throw new ApiError(400, `User with username already exists`);
+    // }
 
     // option 2
-    // if (existedUser) {
-    //     throw new ApiError(400, "User with email or username already exists");
-    // }
+    if (existedUser) {
+        throw new ApiError(409, "User with email or username already exists");
+    }
 
     // checking for images
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    const coverImageLocalPath = req.files?.coverImage[0]?.path;
+    const coverImageLocalPath = req.files?.coverImage && req.files.coverImage[0]?.path;
+    console.log(coverImageLocalPath);
 
     if (!avatarLocalPath) {
         throw new ApiError(400, "Avatar is required");

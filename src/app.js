@@ -2,7 +2,7 @@ import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-import { LIMIT } from "./constants.js";
+// import { LIMIT } from "./constants.js";
 
 const app = express();
 
@@ -10,10 +10,10 @@ app.use(cors({
     origin: process.env.CORS_ORIGIN
 }));  // adding the url from which the client will be able to talk to the server. This is a security feature to prevent unauthorized access to the server.
 
-app.use(express.json({ limit: LIMIT })); // to limit the amount of data that can be sent to the server.
+app.use(express.json({ limit: "500kb" })); // to limit the amount of data that can be sent to the server.
 app.use(express.urlencoded({
     extended: true,
-    limit: LIMIT
+    limit: "500kb"
 })); // urlencoded is used to parse the url data sent to the server from the client. extended: true allows for nested objects in the data.
 
 app.use(express.static("public"));  // it is used to keep and serve the static files from the public folder present in the root directory.
