@@ -42,7 +42,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
     // checking for images
     const avatarLocalPath = req.files?.avatar[0]?.path;
-    console.log(req.files);
 
     let cover = "";
     if (req.files && req.files.coverImage && req.files.coverImage.length > 0) {
@@ -52,7 +51,7 @@ const registerUser = asyncHandler(async (req, res) => {
             throw new ApiError(500, "Something went wrong while uploading cover image");
         }
     }
-    console.log(req.files);
+    console.log(req.files?.coverImage[0]?.path);
 
     // let coverImageLocalPath;
     // if (req.files && Array.isArray(req.files.coverImage) && req.files.coverImage.length > 0) {
