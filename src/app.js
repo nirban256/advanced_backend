@@ -20,6 +20,7 @@ app.use(express.static("public"));  // it is used to keep and serve the static f
 
 app.use(cookieParser());  // using this I can do crud operation on the cookies present in the client's browser.
 
+app.get("/", (req, res) => res.send("Hello World"));
 
 // import routes
 import userRouter from "./routes/user.routes.js";

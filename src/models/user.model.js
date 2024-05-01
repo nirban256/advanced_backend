@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 import jwt from "jsonwebtoken";  // json web token
 import bcrypt from "bcrypt"; // package that will encrypt the password before storing in the database.
-import { ApiError } from "../utils/ApiError.js";
 
 const userSchema = new Schema(
     {
@@ -56,12 +55,8 @@ const userSchema = new Schema(
 userSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();  // if the password is not modified, then we will not encrypt it again.
 
-    try {
-        this.password = await bcrypt.hash(this.password, 10); // encrypt the password
-        next();
-    } catch (error) {
-        throw new ApiError(500, "Something went wrong", error);
-    }
+    this.password = await bcrypt.hash(this.password, 10); // encrypt the password
+    next();
 });  // we cannot use arrow function here because we need to access the user object using this keyword and arrow function does not have this keyword in its scope.
 
 // method to compare the password entered by the user with the password stored in the database
